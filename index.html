@@ -6,90 +6,91 @@
     <title>Valentine Proposal</title>
     <style>
         body {
-            background: linear-gradient(45deg, rgba(255, 174, 201, 0.5), rgba(255, 215, 240, 0.5));
+            background: linear-gradient(135deg, #ff8a00, #e52e71);
             animation: gradient 15s ease infinite;
             height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
         }
+
         @keyframes gradient {
             0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
         }
-        .glass {
+
+        .card {
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
-            border-radius: 10px;
+            border-radius: 15px;
             padding: 20px;
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
-        }
-        h1 {
-            color: #ff6f61;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
             text-align: center;
-            text-shadow: 0 0 10px #ff6f61;
-        }
-        .heart {
             position: relative;
-            width: 50px;
-            height: 50px;
-            background: red;
-            border-radius: 50%;
-            transform: rotate(-45deg);
-            margin: 10px;
         }
-        .heart:before, .heart:after {
-            content: '';
+
+        h1 {
+            color: #fff;
+            text-shadow: 0 0 10px #ff69b4;
+            margin: 0;
+        }
+
+        .floating-heart {
             position: absolute;
-            background: red;
-            border-radius: 50%;
+            animation: float 3s infinite;
         }
-        .heart:before {
-            width: 50px;
-            height: 50px;
-            top: -25px;
-            left: 0;
+
+        @keyframes float {
+            0% { transform: translatey(0); }
+            50% { transform: translatey(-20px); }
+            100% { transform: translatey(0); }
         }
-        .heart:after {
-            width: 50px;
-            height: 50px;
-            top: 0;
-            left: 25px;
-        }
+
         .button {
-            background-color: #ff6f61;
+            padding: 10px 20px;
             border: none;
+            border-radius: 25px;
+            background: linear-gradient(45deg, #ff0080, #ff8c00);
             color: white;
-            padding: 15px 20px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            border-radius: 5px;
-            transition: transform 0.2s;
-            box-shadow: 0 0 10px #ff6f61;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s;
         }
+
         .button:hover {
-            transform: scale(1.1);
+            transform: scale(1.05);
+            box-shadow: 0 6px 30px rgba(0, 0, 0, 0.3);
         }
     </style>
+    <script>
+        function escape() {
+            const noButton = document.getElementById("no-button");
+            noButton.style.top = Math.random() * 90 + "%";
+            noButton.style.left = Math.random() * 90 + "%";
+        }
+
+        function whatsapp() {
+            window.open("https://wa.me/917981219159", "_blank");
+        }
+
+        function playAudio() {
+            const audio = new Audio('audio_file_url.mp3'); // Replace with actual audio file URL
+            audio.play();
+        }
+    </script>
 </head>
 <body>
-    <div class="glass">
-        <h1>Will You Be My Valentine?</h1>
-        <a href="https://wa.me/your_number?text=Hi!%20I%20would%20like%20to%20be%20your%20Valentine!" class="button">Send a WhatsApp Message!</a>
-        <div class="heart"></div>
-        <div class="heart"></div>
-        <div class="heart"></div>
-        <!-- Interactive escape functionality -->
-        <script>
-            const button = document.querySelector('.button');
-            button.addEventListener('mouseover', () => {
-                button.style.display = 'none'; // Simple escape functionality
-                alert('Too slow! Try again!');
-            });
-        </script>
+    <div class="card">
+        <h1>Will you be my Valentine?</h1>
+        <button class="button" id="yes-button" onclick="playAudio()">Yes</button>
+        <button class="button" id="no-button" onclick="escape()">No</button>
     </div>
+    <script>
+        // Additional functionality for the interactive features
+    </script>
 </body>
 </html>
