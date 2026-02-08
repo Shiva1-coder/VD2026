@@ -1,88 +1,139 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <title>Valentine Proposal</title>
-    <style>
-        body {
-            background: linear-gradient(150deg, #ff77a8, #cf8cff);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            font-family: 'Arial', sans-serif;
-            color: #fff;
-            text-align: center;
-            backdrop-filter: blur(10px);
-        }
-        .button {
-            padding: 20px 40px;
-            font-size: 20px;
-            border: none;
-            border-radius: 25px;
-            cursor: pointer;
-            transition: transform 0.3s ease;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(10px);
-        }
-        .button:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
-        }
-        .yes {
-            background: rgba(234, 255, 204, 0.8);
-        }
-        .no {
-            background: rgba(255, 204, 204, 0.8);
-        }
-        .hidden {
-            display: none;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <title>Valentine Proposal 💖</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      background: linear-gradient(150deg, #ff77a8, #cf8cff);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: Arial, sans-serif;
+      color: #fff;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    h1 {
+      margin-bottom: 30px;
+    }
+
+    .container {
+      position: relative;
+      width: 320px;
+      height: 200px;
+    }
+
+    .button {
+      padding: 18px 36px;
+      font-size: 20px;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      position: absolute;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      transition: transform 0.2s ease;
+    }
+
+    .yes {
+      background: rgba(234, 255, 204, 0.9);
+      left: 20px;
+      top: 80px;
+    }
+
+    .no {
+      background: rgba(255, 204, 204, 0.9);
+      right: 20px;
+      top: 80px;
+    }
+
+    .final-text {
+      display: none;
+      font-size: 22px;
+      margin-top: 20px;
+    }
+  </style>
 </head>
+
 <body>
-    <h1>Will You Be My Valentine?</h1>
-    <button class="button yes">Yes</button>
-    <button class="button no">No</button>
-    
-    <audio id="audio" src="audio-message.mp3" preload="auto"></audio>
 
-    <script>
-        let attempts = 0;
-        const maxAttempts = 6;
-        const yesButton = document.querySelector('.yes');
-        const noButton = document.querySelector('.no');
-        const audio = document.getElementById('audio');
+  <div>
+    <h1>Will You Be My Valentine? 💕</h1>
 
-        yesButton.addEventListener('mouseover', function() {
-            yesButton.style.transform = 'translateY(-10px)';
-        });
+    <div class="container">
+      <button class="button yes">Yes 😍</button>
+      <button class="button no">No 🙈</button>
+    </div>
 
-        yesButton.addEventListener('mouseout', function() {
-            yesButton.style.transform = '';
-        });
+    <div class="final-text" id="finalText">
+      You finally caught it 😌💖
+    </div>
+  </div>
 
-        noButton.addEventListener('mouseover', function() {
-            noButton.style.transform = 'translateY(-10px)';
-        });
+  <!-- 🎵 Audio -->
+  <audio id="audio" src="audio-message.mp3" preload="auto"></audio>
 
-        noButton.addEventListener('mouseout', function() {
-            noButton.style.transform = '';
-        });
+  <script>
+    let attempts = 0;
+    const maxAttempts = 6;
 
-        yesButton.addEventListener('click', function() {
-            audio.play();
-            alert('Yay! You said yes! 🎉');
-        });
+    const yesButton = document.querySelector('.yes');
+    const noButton = document.querySelector('.no');
+    const audio = document.getElementById('audio');
+    const container = document.querySelector('.container');
+    const finalText = document.getElementById('finalText');
 
-        noButton.addEventListener('click', function() {
-            attempts++;
-            if (attempts < maxAttempts) {
-                alert(`Try again! You have ${maxAttempts - attempts} attempts left.`);
-            } else {
-                alert('No more attempts left! 💔');
-                yesButton.classList.add('hidden');
-                noButton.classList.add('hidden');
-            }
-        });
-    </script>
+    const phoneNumber = "91XXXXXXXXXX"; // 👈 PUT YOUR NUMBER HERE
+
+    function moveButton(btn) {
+      if (attempts >= maxAttempts) return;
+
+      attempts++;
+
+      const maxX = container.clientWidth - btn.offsetWidth;
+      const maxY = container.clientHeight - btn.offsetHeight;
+
+      const x = Math.random() * maxX;
+      const y = Math.random() * maxY;
+
+      btn.style.left = `${x}px`;
+      btn.style.top = `${y}px`;
+    }
+
+    [yesButton, noButton].forEach(btn => {
+      btn.addEventListener('mouseenter', () => moveButton(btn));
+      btn.addEventListener('touchstart', () => moveButton(btn));
+    });
+
+    function finalClick(choice) {
+      if (attempts < maxAttempts) return;
+
+      // play song
+      audio.play().catch(() => {});
+
+      // UI update
+      yesButton.style.display = 'none';
+      noButton.style.display = 'none';
+      finalText.style.display = 'block';
+
+      // WhatsApp message
+      const message = `I tried so hard 😭💖 and finally clicked "${choice}"`;
+      const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+
+      // small delay so song starts
+      setTimeout(() => {
+        window.location.href = url;
+      }, 1200);
+    }
+
+    yesButton.addEventListener('click', () => finalClick('YES 😍'));
+    noButton.addEventListener('click', () => finalClick('NO 🙈'));
+  </script>
+
 </body>
 </html>
