@@ -6,74 +6,87 @@
     <title>Valentine Proposal</title>
     <style>
         body {
-            margin: 0;
+            background: linear-gradient(135deg, #f3ec78, #af4261);
+            font-family: 'Arial', sans-serif;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             height: 100vh;
-            background: linear-gradient(135deg, rgba(255,0,150,1) 0%, rgba(0,204,255,1) 100%);
             overflow: hidden;
-            animation: gradient 5s ease infinite;
+            position: relative;
+            text-align: center;
         }
-        @keyframes gradient {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        .container {
+            position: relative;
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
         }
-        .heart {
+        button {
+            border: none;
+            border-radius: 10px;
+            padding: 15px 30px;
+            font-size: 20px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .yes-button {
+            background-color: #28a745;
+            color: white;
+        }
+        .no-button {
+            background-color: #dc3545;
             position: absolute;
-            width: 50px;
-            height: 50px;
-            background: red;
-            clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
-            animation: float 3s ease-in-out infinite;
+        }
+        .floating-heart {
+            position: absolute;
+            font-size: 50px;
+            animation: float 3s infinite;
         }
         @keyframes float {
             0% { transform: translateY(0); }
             50% { transform: translateY(-20px); }
             100% { transform: translateY(0); }
         }
-        .card {
-            border-radius: 15px;
-            backdrop-filter: blur(10px);
-            padding: 20px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-            text-align: center;
-            margin: 50px auto;
-            width: 300px;
-        }
-        .button {
-            background: linear-gradient(45deg, #ff6b6b, #f7bb97);
-            border: none;
-            border-radius: 25px;
-            padding: 10px 20px;
-            color: white;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .button:hover {
-            box-shadow: 0 4px 20px rgba(255, 107, 107, 0.5);
-        }
-        .glow {
-            text-shadow: 0 0 5px #ffcc00, 0 0 10px #ffcc00;
+        .glow { 
+            text-shadow: 0 0 5px #ff0000, 0 0 10px #ff0000, 0 0 15px #ff0000;
         }
     </style>
 </head>
 <body>
-    <div class="heart" style="top: 20%; left: 10%; animation-delay: 0s;"></div>
-    <div class="heart" style="top: 30%; left: 50%; animation-delay: 1s;"></div>
-    <div class="heart" style="top: 40%; left: 80%; animation-delay: 2s;"></div>
-    <div class="card">
-        <h1 class="glow">Will you be my Valentine?</h1>
-        <button class="button" onclick="sendWhatsApp()">Yes</button>
-        <button class="button" onclick="moveAway()">No</button>
+    <div class="container">
+        <h1 class="glow">Will You Be My Valentine?</h1>
+        <button class="yes-button" id="yesButton">Yes!</button>
+        <button class="no-button" id="noButton">No!</button>
+        <audio id="audio" src="path_to_audio.mp3" preload="auto"></audio>
+        <div class="floating-heart">❤️</div>
     </div>
-    <audio id="audio" src="proposal_audio.mp3"></audio>
     <script>
-        function sendWhatsApp() {
-            window.open(`https://wa.me/917981219159?text=I%20would%20love%20to%20be%20your%20Valentine!`);
-        }
-        function moveAway() {
-            // Logic to animate 'No' button out of view
-            alert("You have 6 attempts!");
-        }
+        let attempts = 0;
+        const noButton = document.getElementById('noButton');
+        const yesButton = document.getElementById('yesButton');
+        const audio = document.getElementById('audio');
+        const floatingHeart = document.querySelector('.floating-heart');
+
+        noButton.addEventListener('mouseover', () => {
+            const x = Math.random() * (window.innerWidth - noButton.offsetWidth);
+            const y = Math.random() * (window.innerHeight - noButton.offsetHeight);
+            noButton.style.left = `${x}px`;
+            noButton.style.top = `${y}px`;
+        });
+
+        yesButton.addEventListener('click', () => {
+            window.open('https://wa.me/917981219159?text=I%20accept%20your%20proposal!','_blank');
+            audio.play();
+        });
+
+        noButton.addEventListener('click', () => {
+            attempts++;
+            if (attempts >= 6) {
+                alert('You have exhausted your attempts!');
+            }
+        });
     </script>
 </body>
 </html>
