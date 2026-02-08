@@ -1,90 +1,86 @@
-<!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Valentine Proposal</title>
     <style>
         body {
-            background: linear-gradient(135deg, #f3ec78, #af4261);
-            font-family: 'Arial', sans-serif;
-            color: #fff;
+            background: linear-gradient(150deg, #ff77a8, #cf8cff);
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            overflow: hidden;
-            position: relative;
+            font-family: 'Arial', sans-serif;
+            color: #fff;
             text-align: center;
-        }
-        .container {
-            position: relative;
             backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: 20px;
         }
-        button {
-            border: none;
-            border-radius: 10px;
-            padding: 15px 30px;
+        .button {
+            padding: 20px 40px;
             font-size: 20px;
+            border: none;
+            border-radius: 25px;
             cursor: pointer;
-            transition: 0.3s;
+            transition: transform 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
         }
-        .yes-button {
-            background-color: #28a745;
-            color: white;
+        .button:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
         }
-        .no-button {
-            background-color: #dc3545;
-            position: absolute;
+        .yes {
+            background: rgba(234, 255, 204, 0.8);
         }
-        .floating-heart {
-            position: absolute;
-            font-size: 50px;
-            animation: float 3s infinite;
+        .no {
+            background: rgba(255, 204, 204, 0.8);
         }
-        @keyframes float {
-            0% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
-            100% { transform: translateY(0); }
-        }
-        .glow { 
-            text-shadow: 0 0 5px #ff0000, 0 0 10px #ff0000, 0 0 15px #ff0000;
+        .hidden {
+            display: none;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1 class="glow">Will You Be My Valentine?</h1>
-        <button class="yes-button" id="yesButton">Yes!</button>
-        <button class="no-button" id="noButton">No!</button>
-        <audio id="audio" src="path_to_audio.mp3" preload="auto"></audio>
-        <div class="floating-heart">❤️</div>
-    </div>
+    <h1>Will You Be My Valentine?</h1>
+    <button class="button yes">Yes</button>
+    <button class="button no">No</button>
+    
+    <audio id="audio" src="audio-message.mp3" preload="auto"></audio>
+
     <script>
         let attempts = 0;
-        const noButton = document.getElementById('noButton');
-        const yesButton = document.getElementById('yesButton');
+        const maxAttempts = 6;
+        const yesButton = document.querySelector('.yes');
+        const noButton = document.querySelector('.no');
         const audio = document.getElementById('audio');
-        const floatingHeart = document.querySelector('.floating-heart');
 
-        noButton.addEventListener('mouseover', () => {
-            const x = Math.random() * (window.innerWidth - noButton.offsetWidth);
-            const y = Math.random() * (window.innerHeight - noButton.offsetHeight);
-            noButton.style.left = `${x}px`;
-            noButton.style.top = `${y}px`;
+        yesButton.addEventListener('mouseover', function() {
+            yesButton.style.transform = 'translateY(-10px)';
         });
 
-        yesButton.addEventListener('click', () => {
-            window.open('https://wa.me/917981219159?text=I%20accept%20your%20proposal!','_blank');
+        yesButton.addEventListener('mouseout', function() {
+            yesButton.style.transform = '';
+        });
+
+        noButton.addEventListener('mouseover', function() {
+            noButton.style.transform = 'translateY(-10px)';
+        });
+
+        noButton.addEventListener('mouseout', function() {
+            noButton.style.transform = '';
+        });
+
+        yesButton.addEventListener('click', function() {
             audio.play();
+            alert('Yay! You said yes! 🎉');
         });
 
-        noButton.addEventListener('click', () => {
+        noButton.addEventListener('click', function() {
             attempts++;
-            if (attempts >= 6) {
-                alert('You have exhausted your attempts!');
+            if (attempts < maxAttempts) {
+                alert(`Try again! You have ${maxAttempts - attempts} attempts left.`);
+            } else {
+                alert('No more attempts left! 💔');
+                yesButton.classList.add('hidden');
+                noButton.classList.add('hidden');
             }
         });
     </script>
