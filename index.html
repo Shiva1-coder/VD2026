@@ -65,16 +65,29 @@
       font-size: 24px;
       margin-top: 20px;
     }
+
+    /* 🔊 SOUND HINT */
+    .sound-hint {
+      position: fixed;
+      bottom: 20px;
+      font-size: 14px;
+      opacity: 0.85;
+      animation: pulse 1.6s infinite;
+      z-index: 20;
+    }
+
+    @keyframes pulse {
+      0% { opacity: 0.4; }
+      50% { opacity: 1; }
+      100% { opacity: 0.4; }
+    }
   </style>
 </head>
 
 <body>
 
   <div class="content">
-    <!-- 🖼️ ONE IMAGE -->
     <img src="love.jpg" alt="Us 💖" />
-
-    <!-- 💌 MESSAGE BELOW IMAGE -->
     <h1>Will You Be My Valentine? 💕</h1>
 
     <div class="final-text" id="finalText">
@@ -84,27 +97,47 @@
     </div>
   </div>
 
+  <!-- 🔊 SOUND HINT -->
+  <div class="sound-hint" id="soundHint">
+    🔊 Tap anywhere to enable sound
+  </div>
+
   <!-- Buttons -->
   <button class="button yes">Yes 😍</button>
   <button class="button no">No 🙈</button>
 
-  <!-- 🎵 Audio -->
-  <audio id="audio" src="audio-message.mp3" preload="auto"></audio>
+  <!-- 🎵 AUDIO -->
+  <audio id="audio" src="audio-message.mp3" autoplay loop muted></audio>
 
   <script>
     let attempts = 0;
     const maxAttempts = 7;
+    let audioUnlocked = false;
 
     const yesButton = document.querySelector('.yes');
     const noButton = document.querySelector('.no');
     const audio = document.getElementById('audio');
     const finalText = document.getElementById('finalText');
+    const soundHint = document.getElementById('soundHint');
 
-    const phoneNumber = "917981219159"; // 👈 YOUR NUMBER
+    const phoneNumber = "917981219159";
+
+    window.addEventListener('load', () => {
+      audio.play().catch(() => {});
+    });
+
+    function unlockAudio() {
+      if (!audioUnlocked) {
+        audio.muted = false;
+        audioUnlocked = true;
+        soundHint.style.display = 'none'; // 🔥 hide hint
+      }
+    }
 
     function teleport(btn) {
-      if (attempts >= maxAttempts) return;
+      unlockAudio();
 
+      if (attempts >= maxAttempts) return;
       attempts++;
 
       const speed = Math.max(60, 200 - attempts * 20);
@@ -114,13 +147,10 @@
       const maxX = window.innerWidth - btn.offsetWidth - padding;
       const maxY = window.innerHeight - btn.offsetHeight - padding;
 
-      // playful fake pause 😈
       if (attempts === 3) {
         btn.style.left = '48%';
         btn.style.top = '60%';
-        setTimeout(() => {
-          moveRandom(btn, maxX, maxY);
-        }, 250);
+        setTimeout(() => moveRandom(btn, maxX, maxY), 250);
         return;
       }
 
@@ -128,33 +158,29 @@
     }
 
     function moveRandom(btn, maxX, maxY) {
-      const x = Math.random() * maxX;
-      const y = Math.random() * maxY;
-      btn.style.left = `${x}px`;
-      btn.style.top = `${y}px`;
+      btn.style.left = `${Math.random() * maxX}px`;
+      btn.style.top = `${Math.random() * maxY}px`;
     }
 
     [yesButton, noButton].forEach(btn => {
       btn.addEventListener('mouseenter', () => teleport(btn));
       btn.addEventListener('touchstart', () => teleport(btn));
+      btn.addEventListener('click', unlockAudio);
     });
 
     function finalClick(choice) {
       if (attempts < maxAttempts) return;
 
-      audio.play().catch(() => {});
       yesButton.style.display = 'none';
       noButton.style.display = 'none';
       finalText.style.display = 'block';
 
       const message =
-        `I chased those buttons ALL over 😭💖 and finally clicked "${choice}"`;
-
-      const url =
-        `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+        `I heard the music 🎶, chased the buttons 😭💖 and clicked "${choice}"`;
 
       setTimeout(() => {
-        window.location.href = url;
+        window.location.href =
+          `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
       }, 1200);
     }
 
