@@ -20,13 +20,8 @@
     }
 
     h1 {
-      margin-bottom: 30px;
-    }
-
-    .container {
-      position: relative;
-      width: 320px;
-      height: 200px;
+      margin-bottom: 20px;
+      z-index: 1;
     }
 
     .button {
@@ -35,27 +30,29 @@
       border: none;
       border-radius: 25px;
       cursor: pointer;
-      position: absolute;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-      transition: transform 0.2s ease;
+      position: fixed;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
+      transition: left 0.15s linear, top 0.15s linear;
+      z-index: 10;
     }
 
     .yes {
-      background: rgba(234, 255, 204, 0.9);
-      left: 20px;
-      top: 80px;
+      background: rgba(234, 255, 204, 0.95);
+      left: 35%;
+      top: 55%;
     }
 
     .no {
-      background: rgba(255, 204, 204, 0.9);
-      right: 20px;
-      top: 80px;
+      background: rgba(255, 204, 204, 0.95);
+      left: 55%;
+      top: 55%;
     }
 
     .final-text {
       display: none;
-      font-size: 22px;
+      font-size: 24px;
       margin-top: 20px;
+      z-index: 1;
     }
   </style>
 </head>
@@ -64,68 +61,81 @@
 
   <div>
     <h1>Will You Be My Valentine? 💕</h1>
-
-    <div class="container">
-      <button class="button yes">Yes 😍</button>
-      <button class="button no">No 🙈</button>
-    </div>
-
     <div class="final-text" id="finalText">
-      You finally caught it 😌💖
+      You caught me 😌💖  
+      (There was never a real choice)
     </div>
   </div>
+
+  <button class="button yes">Yes 😍</button>
+  <button class="button no">No 🙈</button>
 
   <!-- 🎵 Audio -->
   <audio id="audio" src="audio-message.mp3" preload="auto"></audio>
 
   <script>
     let attempts = 0;
-    const maxAttempts = 6;
+    const maxAttempts = 7;
 
     const yesButton = document.querySelector('.yes');
     const noButton = document.querySelector('.no');
     const audio = document.getElementById('audio');
-    const container = document.querySelector('.container');
     const finalText = document.getElementById('finalText');
 
-    const phoneNumber = "91XXXXXXXXXX"; // 👈 PUT YOUR NUMBER HERE
+    const phoneNumber = "917981219159"; // 👈 YOUR NUMBER
 
-    function moveButton(btn) {
+    function teleport(btn) {
       if (attempts >= maxAttempts) return;
 
       attempts++;
 
-      const maxX = container.clientWidth - btn.offsetWidth;
-      const maxY = container.clientHeight - btn.offsetHeight;
+      // speed increases 😈
+      const speed = Math.max(60, 200 - attempts * 20);
+      btn.style.transition = `left ${speed}ms linear, top ${speed}ms linear`;
 
+      const padding = 20;
+      const maxX = window.innerWidth - btn.offsetWidth - padding;
+      const maxY = window.innerHeight - btn.offsetHeight - padding;
+
+      // evil fake pause on 3rd try
+      if (attempts === 3) {
+        btn.style.left = '48%';
+        btn.style.top = '48%';
+        setTimeout(() => {
+          moveRandom(btn, maxX, maxY);
+        }, 250);
+        return;
+      }
+
+      moveRandom(btn, maxX, maxY);
+    }
+
+    function moveRandom(btn, maxX, maxY) {
       const x = Math.random() * maxX;
       const y = Math.random() * maxY;
-
       btn.style.left = `${x}px`;
       btn.style.top = `${y}px`;
     }
 
     [yesButton, noButton].forEach(btn => {
-      btn.addEventListener('mouseenter', () => moveButton(btn));
-      btn.addEventListener('touchstart', () => moveButton(btn));
+      btn.addEventListener('mouseenter', () => teleport(btn));
+      btn.addEventListener('touchstart', () => teleport(btn));
     });
 
     function finalClick(choice) {
       if (attempts < maxAttempts) return;
 
-      // play song
       audio.play().catch(() => {});
-
-      // UI update
       yesButton.style.display = 'none';
       noButton.style.display = 'none';
       finalText.style.display = 'block';
 
-      // WhatsApp message
-      const message = `I tried so hard 😭💖 and finally clicked "${choice}"`;
-      const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+      const message =
+        `I chased those buttons ALL over the screen 😭💖 and finally clicked "${choice}"`;
 
-      // small delay so song starts
+      const url =
+        `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+
       setTimeout(() => {
         window.location.href = url;
       }, 1200);
