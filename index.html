@@ -6,91 +6,74 @@
     <title>Valentine Proposal</title>
     <style>
         body {
-            background: linear-gradient(135deg, #ff8a00, #e52e71);
-            animation: gradient 15s ease infinite;
+            margin: 0;
             height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            background: linear-gradient(135deg, rgba(255,0,150,1) 0%, rgba(0,204,255,1) 100%);
             overflow: hidden;
-            font-family: Arial, sans-serif;
+            animation: gradient 5s ease infinite;
         }
-
         @keyframes gradient {
             0% { background-position: 0% 50%; }
-            100% { background-position: 100% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
-
-        .card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: 20px;
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            position: relative;
-        }
-
-        h1 {
-            color: #fff;
-            text-shadow: 0 0 10px #ff69b4;
-            margin: 0;
-        }
-
-        .floating-heart {
+        .heart {
             position: absolute;
-            animation: float 3s infinite;
+            width: 50px;
+            height: 50px;
+            background: red;
+            clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+            animation: float 3s ease-in-out infinite;
         }
-
         @keyframes float {
-            0% { transform: translatey(0); }
-            50% { transform: translatey(-20px); }
-            100% { transform: translatey(0); }
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0); }
         }
-
+        .card {
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            margin: 50px auto;
+            width: 300px;
+        }
         .button {
-            padding: 10px 20px;
+            background: linear-gradient(45deg, #ff6b6b, #f7bb97);
             border: none;
             border-radius: 25px;
-            background: linear-gradient(45deg, #ff0080, #ff8c00);
+            padding: 10px 20px;
             color: white;
-            font-weight: bold;
-            text-transform: uppercase;
             cursor: pointer;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
             transition: all 0.3s;
         }
-
         .button:hover {
-            transform: scale(1.05);
-            box-shadow: 0 6px 30px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 20px rgba(255, 107, 107, 0.5);
+        }
+        .glow {
+            text-shadow: 0 0 5px #ffcc00, 0 0 10px #ffcc00;
         }
     </style>
-    <script>
-        function escape() {
-            const noButton = document.getElementById("no-button");
-            noButton.style.top = Math.random() * 90 + "%";
-            noButton.style.left = Math.random() * 90 + "%";
-        }
-
-        function whatsapp() {
-            window.open("https://wa.me/917981219159", "_blank");
-        }
-
-        function playAudio() {
-            const audio = new Audio('audio_file_url.mp3'); // Replace with actual audio file URL
-            audio.play();
-        }
-    </script>
 </head>
 <body>
+    <div class="heart" style="top: 20%; left: 10%; animation-delay: 0s;"></div>
+    <div class="heart" style="top: 30%; left: 50%; animation-delay: 1s;"></div>
+    <div class="heart" style="top: 40%; left: 80%; animation-delay: 2s;"></div>
     <div class="card">
-        <h1>Will you be my Valentine?</h1>
-        <button class="button" id="yes-button" onclick="playAudio()">Yes</button>
-        <button class="button" id="no-button" onclick="escape()">No</button>
+        <h1 class="glow">Will you be my Valentine?</h1>
+        <button class="button" onclick="sendWhatsApp()">Yes</button>
+        <button class="button" onclick="moveAway()">No</button>
     </div>
+    <audio id="audio" src="proposal_audio.mp3"></audio>
     <script>
-        // Additional functionality for the interactive features
+        function sendWhatsApp() {
+            window.open(`https://wa.me/917981219159?text=I%20would%20love%20to%20be%20your%20Valentine!`);
+        }
+        function moveAway() {
+            // Logic to animate 'No' button out of view
+            alert("You have 6 attempts!");
+        }
     </script>
 </body>
 </html>
